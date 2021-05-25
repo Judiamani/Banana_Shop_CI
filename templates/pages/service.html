@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+            <meta charset='utf-8'>
+            <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+            <title>La bonne banane</title>
+            <meta name='viewport' content='width=device-width, initial-scale=1'>
+            <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+            <script src='main.js'></script>
+            
+            
+            <script src='static/js/jquery-3.2.1.min.js'></script>
+            <script src='static/js/popper.min.js'></script>
+            <script src='static/js/bootstrap.min.js'></script>
+        
+        
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+        <style>
+        body {
+        color: #404040;
+        font: 500 20px/26px 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      li:hover {
+          background-color: #c0b628;
+        }
+
+      * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+        </style>
+    </head>
+    <body>
+        <style>
+            .map-overlay-container {
+            position: absolute;
+            margin-top: 150px;
+            width: 25%;
+            top: 0;
+            left: 0;
+            padding: 10px;
+            z-index: 1;
+            }
+            
+            .map-overlay {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            background-color: #fff;
+            border-radius: 3px;
+            padding: 10px;
+            box-shadow:0 1px 2px rgba(0,0,0,0.20);
+            }
+            
+            .map-overlay h2,
+            .map-overlay p {
+            margin: 0 0 10px;
+            }
+        </style>
+
+<nav id="nav" class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="background-color:rgb(247, 205, 150);">
+  <a class="navbar-brand" style="color: rgb(173, 24, 24);" href="{% url 'home' %}"><img src="../static/logba.png " alt="La bonne banane !" width="190" height="120"/><em><strong>BanaCI, la banane ivoirienne</strong></em> </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'home' %}">Accueil <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'carte' %}">Cartographie</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'service' %}">
+            Services
+          </a>
+        </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'stat' %}">Passer une commande</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+  
+        
+        <div id='map'></div>
+        
+        <div class='map-overlay-container'>
+        <div class='map-overlay'>
+          <a href="{% url 'stat' %}"><button class="btn btn-outline-success my-2 my-sm-0" style="float: right;">Commandez !</button></a>
+            <h2 id='location-title'></h2>
+            <img src="../static/bana.jpg " alt="La banane!" width="300" height="200"/>
+            <p id='location-description'></p>
+            
+        </div>
+        </div>
+
+
+        
+        <div class='map-overlay-container' style="margin-left: 950px; width: auto; margin-top:  350px;">
+                <div class='map-overlay'>
+                    <video width="370" height="230" autoplay="true" controls="controls">
+                                <source src="../static/prod.mp4 " type="video/mp4" />
+                                Ici l'alternative à la vidéo : un lien de téléchargement, un message, etc.
+                        </video>
+                </div>
+        </div>
+        
+        <script>
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZ29kaXNvbmUiLCJhIjoiY2syZXN0bXExMGJ5OTNkcGJnbDU2ZXZ1YiJ9.5Y27Gk4On1x1oOlAzqeQNA';
+            var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-5, 7],
+            maxZoom: 16,
+            minZoom: 9,
+            zoom: 9.68
+            });
+            
+
+            var title = document.getElementById('location-title');
+            var description = document.getElementById('location-description');
+            
+            var locations = [{
+            "id": "2",
+            "title": "Agboville",
+            "description": "Agboville est le chef-lieu de la région Agnéby-Tiassa en Côte d'Ivoire. Ce département d'une superficie de 3 850 km², selon le dernier recensement en 2014, 292 109 habitants avec une densité de 63,6 hab/km² alors qu'à Agboville commune, on comptait 95 093 habitants pour une superficie de 1 602,1 km².",
+            "camera": {
+            center: [-4.22, 5.93],
+            zoom: 14,
+            pitch: 50
+            }
+            },  {
+            "id": "3",
+            "title": "Bouaflé",
+            "description": "Bouaflé est une ville de Côte d'Ivoire de la région de la Marahoué. La ville est proche du Lac Kossou.",
+            "camera": {
+            center: [-5.74, 6.98],
+            bearing: 25.3,
+            pitch: 50,
+            zoom: 14
+            }
+            }, {
+            "id": "4",
+            "title": "Abengourou",
+            "description": "Abengourou située à 210 kilomètres d'Abidjan, est une ville à l'est de la Côte d'Ivoire. Elle fait partie du district de Comoé dans la région du Indénié-Djuablin dont elle est le chef-lieu, à la frontière avec le Ghana. Abengourou est le fief des Agnis.",
+            "camera": {
+            center: [-3.48, 6.71],
+            bearing: 36,
+            pitch: 50,
+            zoom: 14
+            }
+            }, {
+            "id": "5",
+            "title": "Man",
+            "description": "Man est une grande ville de l'ouest de la Côte d'Ivoire et le chef-lieu de la région du Tonkpi. La ville est surnommée 'La ville aux 18 montagnes', et est située dans une cuvette entourée d'une chaîne de montagnes. Elle tire le nom Man du sacrifice du patriarche Gbê, chef de canton de Gbêpleu à la fin du XIXᵉ siècle.",
+            "camera": {
+            center: [-7.55, 7.4],
+            bearing: 28.4,
+            pitch: 50,
+            zoom: 14
+            }
+            }];
+            
+            function highlightBorough(code) {
+            // Only show the polygon feature that cooresponds to `borocode` in the data
+            map.setFilter('highlight', ["==", "borocode", code]);
+            }
+            
+            function playback(index) {
+                title.textContent = locations[index].title;
+                description.textContent = locations[index].description;
+                
+                highlightBorough(locations[index].id ? locations[index].id : '');
+                
+                // Animate the map position based on camera properties
+                map.flyTo(locations[index].camera);
+                
+                map.once('moveend', function() {
+                // Duration the slide is on screen after interaction
+                window.setTimeout(function() {
+                // Increment index
+                index = (index + 1 === locations.length) ? 0 : index + 1;
+                playback(index);
+                }, 3000); // After callback, show the location for 3 seconds.
+                });
+            }
+            
+            // Display the last title/description first
+            title.textContent = locations[locations.length - 1].title;
+            description.textContent = locations[locations.length - 1].description;
+            
+            map.on('load', function() {
+            
+            map.addLayer({
+                "id": "highlight",
+                "type": "fill",
+                "source": {
+                "type": "vector",
+                "url": "mapbox://mapbox.8ibmsn6u"
+                },
+                "source-layer": "original",
+                "paint": {
+                "fill-color": "#fd6b50",
+                "fill-opacity": 0.25
+                },
+                "filter": ["==", "borocode", ""]
+                }, 'settlement-subdivision-label'); // Place polygon under the neighborhood labels.
+                
+                // Start the playback animation for each borough
+                playback(0);
+            });
+        </script>
+ <br><br><br>
+    
+
+      <div style="width: 100%; height: 50px; background-color: #696969; text-align: center; padding: 10px 10px 10px 10px; background-position: bottom;">
+          <strong style="color: white; font-size: 15px;">© 2020 BanaCI. Tous droits réservés </strong>
+          <a target = "_self" href="https://www.facebook.com/profile.php?id=100005672775138" title='AMANI Facebook' id='fb'><strong><i class="fab fa-facebook-square"></i></strong></a>
+      </div>         
+        
+    
+    </body>
+</html>

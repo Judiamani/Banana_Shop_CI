@@ -1,0 +1,739 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>La bonne banane</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+
+    <script src='main.js'></script>
+  
+
+    <script src='static/js/jquery-3.2.1.min.js'></script>
+    <script src='static/js/popper.min.js'></script>
+    <script src='static/js/bootstrap.min.js'></script>
+
+    
+  
+    <style>
+       
+       
+        body {
+        background: #404040;
+        margin: 100;
+        color: #f8f8f8;
+        font: 500 20px/26px 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      li:hover {
+          background-color: #c0b628;
+        }
+
+    </style>
+
+</head>
+
+
+<body id="bg" style="background: rgb(223, 240, 248) url('wine.jpg') no-repeat">
+ 
+
+        <nav id="nav" class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="background-color:rgb(247, 205, 150);">
+                <a class="navbar-brand" style="color: rgb(173, 24, 24);" href="{% url 'home' %}"><img src="static/logba.png " alt="La bonne banane !" width="190" height="120"/><em><strong>BanaCI, la banane ivoirienne</strong></em> </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'home' %}">Accueil <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'carte' %}">Cartographie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'service' %}">
+                          Services
+                        </a>
+                      </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'stat' %}">Passer une commande</a>
+                    </li>
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+                </div>
+              </nav>
+    
+    
+                 
+
+
+              <div class="slider">
+                <div class="slide_viewer">
+                  <div class="slide_group">
+                    <div class="slide">
+                    <img src="static/plant.png" alt="" />
+                    <figcaption><h3>Ensemble pour une production de qualité !</h3></figcaption>
+                    </div>
+                    <div class="slide">
+                    <img src="static/bn.png" alt="" />
+                    <figcaption><h3>Consommons chez nous !</h3></figcaption>
+                    </div>
+                    <div class="slide">
+                    <img src="static/ba2.png" alt="" />
+                    <figcaption><h3>La qualité qui fait la différence !</h3></figcaption>
+                    </div>
+                    <div class="slide">
+                    <img src="static/ban.png" alt=""/>
+                    <figcaption><h3>La banane de qualité pour des plats copieux !</h3></figcaption>
+                    </div>
+                  </div>
+                </div>
+              
+              
+                <div class="directional_nav">
+                <div class="previous_btn" title="Previous">
+                  <svg version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" x="0px" y="0px" width="65px" height="65px" viewBox="-11 -11.5 65 66">
+                    <g>
+                      <g>
+                        <path fill="#474544" d="M-10.5,22.118C-10.5,4.132,4.133-10.5,22.118-10.5S54.736,4.132,54.736,22.118
+                    c0,17.985-14.633,32.618-32.618,32.618S-10.5,40.103-10.5,22.118z M-8.288,22.118c0,16.766,13.639,30.406,30.406,30.406 c16.765,0,30.405-13.641,30.405-30.406c0-16.766-13.641-30.406-30.405-30.406C5.35-8.288-8.288,5.352-8.288,22.118z"/>
+                        <path fill="#474544" d="M25.43,33.243L14.628,22.429c-0.433-0.432-0.433-1.132,0-1.564L25.43,10.051c0.432-0.432,1.132-0.432,1.563,0	c0.431,0.431,0.431,1.132,0,1.564L16.972,21.647l10.021,10.035c0.432,0.433,0.432,1.134,0,1.564	c-0.215,0.218-0.498,0.323-0.78,0.323C25.929,33.569,25.646,33.464,25.43,33.243z"/>
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+                <div class="next_btn" title="Next">
+                  <svg version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" x="0px" y="0px" width="65px" height="65px" viewBox="-11 -11.5 65 66">
+                    <g>
+                      <g>
+                        <path fill="#474544" d="M22.118,54.736C4.132,54.736-10.5,40.103-10.5,22.118C-10.5,4.132,4.132-10.5,22.118-10.5	c17.985,0,32.618,14.632,32.618,32.618C54.736,40.103,40.103,54.736,22.118,54.736z M22.118-8.288	c-16.765,0-30.406,13.64-30.406,30.406c0,16.766,13.641,30.406,30.406,30.406c16.768,0,30.406-13.641,30.406-30.406 C52.524,5.352,38.885-8.288,22.118-8.288z"/>
+                        <path fill="#474544" d="M18.022,33.569c 0.282,0-0.566-0.105-0.781-0.323c-0.432-0.431-0.432-1.132,0-1.564l10.022-10.035 			L17.241,11.615c 0.431-0.432-0.431-1.133,0-1.564c0.432-0.432,1.132-0.432,1.564,0l10.803,10.814c0.433,0.432,0.433,1.132,0,1.564 L18.805,33.243C18.59,33.464,18.306,33.569,18.022,33.569z"/>
+                      </g>
+                    </g>
+                  </svg>
+                </div>   
+              
+                </div><!-- End // .directional_nav -->
+              
+              </div><!-- End // .slider -->
+              
+
+
+              <!--Start of Tawk.to Script-->
+              <script type="text/javascript">
+                var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+                (function(){
+                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+                s1.async=true;
+                s1.src='https://embed.tawk.to/5cd966202846b90c57ae3e3c/1dugfd8as';
+                s1.charset='UTF-8';
+                s1.setAttribute('crossorigin','*');
+                s0.parentNode.insertBefore(s1,s0);
+                })();
+                </script>
+              <!--End of Tawk.to Script-->
+
+
+
+              <div class="container" style="margin-top: 250px; margin-bottom: 50px; ">
+
+                   <!-- start count stats -->
+
+                   <button class="button">Nos statistiques</button><br><br>
+
+                   <style>
+                   .button {
+                   background: #3498db;
+                   width: 250px;
+                   padding: 4px 0;
+                   font-size: 30px;
+                   position: absolute;
+                   left: 50%;
+                   
+                   
+                   transform: translateX(-50%) translateY(-50%);
+                   border-radius: 3px;
+                   
+                   &:hover {
+                       cursor: pointer;
+                   }
+                   
+                   &:after {
+                       content: "";
+                       display: block;
+                       position: absolute;
+                       width: 100%;
+                       height: 10%;
+                       border-radius: 50%;
+                       background-color: darken(#f1c40f, 20%);
+                       opacity: 0.4;
+                       bottom: -30px;
+                   }
+                   }
+                   </style>
+
+                   <script>
+                   var $button = document.querySelector('.button');
+                   $button.addEventListener('click', function() {
+                   var duration = 0.3,
+                       delay = 0.08;
+                   TweenMax.to($button, duration, {scaleY: 1.6, ease: Expo.easeOut});
+                   TweenMax.to($button, duration, {scaleX: 1.2, scaleY: 1, ease: Back.easeOut, easeParams: [3], delay: delay});
+                   TweenMax.to($button, duration * 1.25, {scaleX: 1, scaleY: 1, ease: Back.easeOut, easeParams: [6], delay: delay * 3 });
+                   });
+                   </script>
+
+                   <section id="counter-stats" class="wow fadeInRight" data-wow-duration="1.4s">
+                       <div class="container">
+                           <div class="row">
+
+                               <div class="col-lg-3 stats">
+                                   <i class="fa fa-star" aria-hidden="true"></i>
+                                   <div class="counting" data-count="9">0</div>
+                                   <h5>Partenaires</h5>
+                               </div>
+
+                               <div class="col-lg-3 stats">
+                                   <i class="fa fa-briefcase" aria-hidden="true"></i>
+                                   <div class="counting" data-count="7">0</div>
+                                   <h5>Catégories de Services</h5>
+                               </div>
+
+                               <div class="col-lg-3 stats">
+                                   <i class="fa fa-user" aria-hidden="true"></i>
+                                   <div class="counting" data-count="250">0</div>
+                                   <h5>Clients satisfaits</h5>
+                               </div>
+
+                               <div class="col-lg-3 stats">
+                                   <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                   <div class="counting" data-count="4">0</div>
+                                   <h5>Articles en ligne</h5>
+                               </div>
+
+
+                           </div>
+                           <!-- end row -->
+                       </div>
+                       <!-- end container -->
+                   </section>
+
+
+
+                   <div id="openweathermap-widget-15" style="margin-top: 30px; margin-left: 400px; margin-bottom: 30px;"></div>
+                   <script>window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = []; 
+                    window.myWidgetParam.push({id: 15,cityid: '2293538',appid: '1c2c30f5e8861af0fbb2cf4597380ad2',units: 'metric',containerid: 'openweathermap-widget-15',  });  
+                    (function() {var script = document.createElement('script');script.async = true;script.charset = "utf-8";
+                    script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+                    var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(script, s);  })();
+                   </script>
+                 
+
+
+                <div class="div2" style="background-color: #DCDCDC; opacity: 0.9; width: 100%; padding: 10px"> 
+                  <h2 style="color: black; text-align: center"><em><strong>Nos Partenaires</strong></em></h2><hr>
+                  <MARQUEE scrollamount="15" direction="left" onmouseover="this.stop();" loop="infinite" onmouseout="this.start();">&nbsp;
+                      <a target = "_self" href="http://www.portabidjan.ci/"><img style="margin-left: 70px; height:160px; width:200px" src="static/port.png" title="Port Autonome d'Abidjan"/></a>
+                      <a target = "_self" href="https://www.jumia.ci/"><img style="margin-left: 70px; height:160px; width:200px" src="static/jumia.jfif" title="Jumia"/></a>
+                      <a target = "_self" href="http://www.commodafrica.com/"><img style="margin-left: 70px; height:160px; width:200px" src="static/como.png" title="Commodafrica"/>
+                      <a target = "_self" href="https://www.laposte.ci.post/"><img style="margin-left: 70px; height:160px; width:200px" src="static/poste.png" title="La Poste de Cote d'Ivoire"/></a>
+                      <a target = "_self" href="https://www.groupeconnectiebs.com/iahs.groupeconnectiebs.com/iahs2/"><img style="margin-left: 70px; height:160px; width:200px" src="static/logoIAHS.jpg" title="International Agency for Hybrid Services"/></a>
+                  </MARQUEE>
+                </div>
+
+
+
+
+
+                
+               <script>
+                   $(document).ready(function(){
+                   $("button").click(function(){
+                       $("#counter-stats").fadeIn(1500);
+                   });
+                   });
+               </script>
+
+
+            <script>
+              
+            </script>
+
+     <style>
+         @import url(https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat:400,700);
+     @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css);
+
+
+     /*/ start count stats /*/
+
+     section#counter-stats {
+         display: flex;
+         justify-content: center;
+         padding-top: 15px;
+         background: rgb(163, 161, 161);
+         display:none;
+         width: 100%;
+         
+     }
+
+     .stats {
+       text-align: center;
+       font-size: 35px;
+       font-weight: 700;
+       font-family: 'Montserrat', sans-serif;
+     }
+
+     .stats .fa {
+       color: #008080;
+       font-size: 60px;
+     }
+
+     /*/ end count stats /*/
+
+     @media screen and (max-width: 720px) {
+
+       section#counter-stats {
+         display: flex;
+         justify-content: center;
+         padding-top: 15px;
+         background: gray;
+         display:none;
+         width: 100%;
+       }
+
+       .stats {
+         text-align: center;
+         font-size: 15px;
+         font-weight: 300;
+         font-family: 'Montserrat', sans-serif;
+       }
+
+       .stats .fa {
+         color: #008080;
+         font-size: 35px;
+       }
+
+     }
+     </style>
+     <script>
+
+
+         // number count for stats, using jQuery animate
+
+     $('.counting').each(function() {
+       var $this = $(this),
+           countTo = $this.attr('data-count');
+       
+       $({ countNum: $this.text()}).animate({
+         countNum: countTo
+       },
+
+       {
+
+         duration: 12000,
+         easing:'linear',
+         step: function() {
+           $this.text(Math.floor(this.countNum));
+         },
+         complete: function() {
+           $this.text(this.countNum);
+           //alert('finished');
+         }
+
+       });  
+       
+
+     });
+     </script>
+
+<!-- end count stats -->
+              
+              </div>
+
+                
+
+              <style>
+                
+                .slider {
+                  margin: -300px auto;
+                  max-width: 100%;
+                  max-height: 30%;
+                  margin-top: 145px;
+                  
+                  
+                }
+                
+                .slide_viewer {
+                  height: 530px;
+                  overflow: hidden;
+                  position: relative;
+                }
+                
+                .slide_group {
+                  height: 100%;
+                  position: relative;
+                  width: 100%;
+                }
+                
+                .slide {
+                  display: none;
+                  height: 100%;
+                  position: absolute;
+                  width: 100%;
+                }
+                
+                .slide img {
+                  
+                  height: 100%;
+                  padding: 40px 100px 100px 10px;
+                  margin-left: 250px;
+                  
+                  width: 70%;
+                }
+                
+                .slide figcaption {
+                                    position:absolute;
+                                    width: 500px;
+                                    left:0; right:0; bottom: 5px;
+                                    padding: 20px;
+                                    margin:0;
+                                    border-top: 1px solid rgb(225,225,225);
+                                    text-align:center;
+                                    letter-spacing: 0.05em;
+                                    word-spacing: 0.05em;
+                                    font-family: Georgia, Times, serif;
+                                    background: rgb(221, 205, 205);
+                                    background: rgba(245, 191, 75, 0.7);
+                                    color: #555;
+                                    text-shadow: -1px -1px 0 rgba(255,255,255,0.3);
+                                }
+                
+                @keyframes figcaptionner {
+                                    0%, 25%, 50%, 75%, 100%						{ bottom: -45px;	}
+                                    5%, 20%, 30%, 45%, 55%, 70%, 80%, 95%		{ bottom: 70px; width:50% ;	}
+                                }
+                
+                .slide figcaption {
+                                    /* ... la propriété animation */
+                                    position:absolute;
+                                    padding: 20px 20px; margin:0;
+                                    left:0; right:0; bottom: 5px;
+                                    text-align:center;
+                                    letter-spacing: 0.05em;
+                                    word-spacing: 0.05em;
+                                    font-family: Georgia, Times, serif;
+                                    background: rgb(221, 205, 205);
+                                    background: rgba(245, 239, 225, 0.7);
+                                    color: #555;
+                                    border-top: 1px solid rgb(225,225,225);
+                                    color: #555;
+                                    text-shadow: -1px -1px 0 rgba(255,255,255,0.3);
+                                    
+                                    -webkit-animation: figcaptionner 15s infinite;
+                                    -moz-animation: figcaptionner 15s infinite;
+                                    animation: figcaptionner 15s infinite;
+                                }
+                
+                .slide:first-child {
+                  display: block;
+                }
+                
+                .slide:nth-of-type(1) {
+                  background-image: linear-gradient(to right, rgb(187, 240, 89) , white, rgb(218, 236, 56));
+                }
+                
+                .slide:nth-of-type(2) {
+                  background-image: linear-gradient(to right, rgb(187, 240, 89) , white, rgb(218, 236, 56));                }
+                
+                .slide:nth-of-type(3) {
+                  background-image: linear-gradient(to right, rgb(187, 240, 89) , white, rgb(218, 236, 56));                }
+                
+                .slide:nth-of-type(4) {
+                  background-image: linear-gradient(to right, rgb(187, 240, 89) , white, rgb(218, 236, 56));                }
+                
+                .slide_buttons {
+                  left: 0;
+                  position: absolute;
+                  right: 0;
+                  text-align: center;
+                }
+                
+                a.slide_btn {
+                  color: #474544;
+                  font-size: 42px;
+                  margin: 0 0.175em;
+                  -webkit-transition: all 0.4s ease-in-out;
+                  -moz-transition: all 0.4s ease-in-out;
+                  -ms-transition: all 0.4s ease-in-out;
+                  -o-transition: all 0.4s ease-in-out;
+                  transition: all 0.4s ease-in-out;
+                }
+                
+                .slide_btn.active, .slide_btn:hover {
+                  color: #428CC6;
+                  cursor: pointer;
+                }
+                
+                .directional_nav {
+                  
+                  margin: 0 auto;
+                  max-width: 1200px;
+                  position: relative;
+                  top: -340px;
+                }
+                
+                .previous_btn {
+                  bottom: 0;
+                  left: 0.9px;
+                  margin: auto;
+                  position: absolute;
+                  top: 250px;
+                }
+                
+                .next_btn {
+                  bottom: 0;
+                  margin: auto;
+                  position: absolute;
+                  right: 0.5px;
+                  top: 250px;
+                }
+                
+                .previous_btn, .next_btn {
+                  cursor: pointer;
+                  height: 65px;
+                  opacity: 0.9;
+                  -webkit-transition: opacity 0.4s ease-in-out;
+                  -moz-transition: opacity 0.4s ease-in-out;
+                  -ms-transition: opacity 0.4s ease-in-out;
+                  -o-transition: opacity 0.4s ease-in-out;
+                  transition: opacity 0.4s ease-in-out;
+                  width: 65px;
+                }
+                
+                .previous_btn:hover, .next_btn:hover {
+                  opacity: 3;
+                }
+                
+                @media only screen and (max-width: 720px) {
+                
+                  .slider {
+                  margin: -300px auto;
+                  max-width: 100%;
+                  max-height: 30%;
+                  margin-top: 57px;
+                  
+                }
+                
+                .slide_viewer {
+                  height: 320px;
+                  overflow: hidden;
+                  position: relative;
+                }
+                
+                .slide img {
+                  
+                  height: 100%;
+                  
+                  width: 100%;
+                }
+                
+                @keyframes figcaptionner {
+                                    0%, 25%, 50%, 75%, 100%						{ bottom: -45px;	}
+                                    5%, 20%, 30%, 45%, 55%, 70%, 80%, 95%		{ bottom: -25px; width:100% ;	}
+                                }
+                  .previous_btn {
+                    left: 10px;
+                  }
+                  .next_btn {
+                    right: 10px;
+                  }
+                
+                
+                }
+                </style>
+                
+                <script>
+                
+                $('.slider').each(function() {
+                  var $this = $(this);
+                  var $group = $this.find('.slide_group');
+                  var $slides = $this.find('.slide');
+                  var bulletArray = [];
+                  var currentIndex = 0;
+                  var timeout;
+                  
+                  function move(newIndex) {
+                    var animateLeft, slideLeft;
+                    
+                    advance();
+                    
+                    if ($group.is(':animated') || currentIndex === newIndex) {
+                      return;
+                    }
+                    
+                    bulletArray[currentIndex].removeClass('active');
+                    bulletArray[newIndex].addClass('active');
+                    
+                    if (newIndex > currentIndex) {
+                      slideLeft = '100%';
+                      animateLeft = '-100%';
+                    } else {
+                      slideLeft = '-100%';
+                      animateLeft = '100%';
+                    }
+                    
+                    $slides.eq(newIndex).css({
+                      display: 'block',
+                      left: slideLeft
+                    });
+                    $group.animate({
+                      left: animateLeft
+                    }, function() {
+                      $slides.eq(currentIndex).css({
+                        display: 'none'
+                      });
+                      $slides.eq(newIndex).css({
+                        left: 0
+                      });
+                      $group.css({
+                        left: 0
+                      });
+                      currentIndex = newIndex;
+                    });
+                  }
+                  
+                  function advance() {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function() {
+                      if (currentIndex < ($slides.length - 1)) {
+                        move(currentIndex + 1);
+                      } else {
+                        move(0);
+                      }
+                    }, 4000);
+                  }
+                  
+                  $('.next_btn').on('click', function() {
+                    if (currentIndex < ($slides.length - 1)) {
+                      move(currentIndex + 1);
+                    } else {
+                      move(0);
+                    }
+                  });
+                  
+                  $('.previous_btn').on('click', function() {
+                    if (currentIndex !== 0) {
+                      move(currentIndex - 1);
+                    } else {
+                      move(3);
+                    }
+                  });
+                  
+                  $.each($slides, function(index) {
+                    var $button = $('<a class="slide_btn">&bull;</a>');
+                    
+                    if (index === currentIndex) {
+                      $button.addClass('active');
+                    }
+                    $button.on('click', function() {
+                      move(index);
+                    }).appendTo('.slide_buttons');
+                    bulletArray.push($button);
+                  });
+                  
+                  advance();
+                });
+                
+                </script>
+
+            
+
+
+<footer  style="background-color: brown ; width: 100%; height: 100%; background-repeat: no-repeat; background-position: bottom; padding-top: 50px">
+
+  
+    
+  <div class="wrap-arc">
+
+    <div class="row"></div>  
+      <h3 style="text-align: center;"> <strong>CONTACTS </strong>
+        <a target = "_self" href="https://www.facebook.com/ECOLES.DESTIC" title='ESATIC Facebook' id='fb'><strong><i style="font-size: 30px;" class="fab fa-facebook-square"></i></strong></a>
+        <a target = "_self" href="https://twitter.com/ESATIC_POLE_TIC" title='ESATIC Twitter' id='tw'><strong><i style="font-size: 30px;" class="fab fa-twitter-square"></i></strong></a>
+        <a target = "_self" href="https://www.youtube.com/channel/UCnnXWw6cqseQeXlE4OGQEMA?view_as=subscriber" title='ESATIC Youtube' id='in'><strong><i style="font-size: 30px;" class="fab fa-youtube" style="color: #fff; background: #d6249f;
+        background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);"></i></strong></a>
+   
+      </h3>     
+    </div>
+    
+    
+    <svg version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink" x="0px" y="0px"
+       viewBox="0 380.031 612 15.938"
+       xml:space="preserve">
+      <path class="arc" d="M612,403.969H0v-2.489c0,0,109.81-13.448,306.159-13.448C502.51,388.031,612,401.479,612,401.479V403.969z"/>
+    </svg>
+  </div><br><br>
+
+  
+
+<div class="row"> 
+      
+            <div class="col-md-4" style="margin-left: 50px;font-size: 18px; background-color: lightgray; color: goldenrod ; opacity: 0.9; width: 300px; height: 180px">
+                        <strong><i class="fa fa-caret-right fa-2x"></i>Siège social : Abidjan Zone 3, Km 4 Bd Marseille
+                        <br> 18 BP 1501 Abidjan 18, Côte d’Ivoire <br>Mail: esatic@esatic.ci</strong>
+            </div>
+                
+            <div class="col-md-4">
+              
+              <iframe target = "_self" style="margin-left: 35px; width: 400px; height: 200px" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.820286433748!2d-4.001034686014753!3d5.290719337733918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfc1e95a7230b815%3A0xb42441cd6ea4939c!2sECOLE%20SUP%C3%89RIEURE%20AFRICAINE%20DES%20TIC%20(%20ESATIC)!5e0!3m2!1sfr!2sci!4v1578240814037!5m2!1sfr!2sci" width="500" height="200" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                      
+            </div>
+
+
+             <div class="col-lg-3" style="margin-left: 20px; font-size: 30px">
+                <h5>N'hésitez pas à nous écrire et à donnez votre avis !</h5>
+                      <a target = "_self" href="{% url 'stat' %}" class="lien_inscription"><button class="btn btn-primary my-2 my-sm-0" type="submit"><strong>Ecrivez-nous !<i class="fas fa-pen" style="padding-left: 15px"></i></strong></button></a>
+             </div>
+
+                     <style>
+                    .myText {
+                          display: none;
+                      }
+                      
+                      .icon:hover .myText {
+                          display: initial;
+}
+                    </style> 
+                  
+    </div>
+
+<div style="width: 100%; height: 50px; background-color: #696969; text-align: center; padding: 10px 10px 10px 10px;">
+    <strong style="color: white; font-size: 15px;">© 2019 BanaCI. Tous droits réservés</strong>
+    <a target = "_self" href="https://www.facebook.com/profile.php?id=100005672775138" title='AMANI Facebook' id='fb'><strong><i class="fab fa-facebook-square"></i></strong></a>
+</div>
+
+</footer>
+
+
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
+
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">

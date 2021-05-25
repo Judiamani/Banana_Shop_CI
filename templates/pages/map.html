@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Cartographie du cacao - CI </title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='main.js'></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet'>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+
+      body {
+        color: #404040;
+        font: 500 20px/26px 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      .sidebar {
+        position: absolute;
+        width: 33.3333%;
+        height: 100%;
+        margin-top: 130px;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        border-right: 1px solid rgba(0, 0, 0, 0.25);
+      }
+
+      .pad2 {
+        padding: 20px;
+      }
+
+      .map {
+        position: absolute;
+        left: 33.3333%;
+        width: 66.6666%;
+        height: 100%;
+        margin-top: 130px;
+        top: 0;
+        bottom: 0;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin: 0;
+        font-weight: 400;
+        line-height: 20px;
+        padding: 20px 2px;
+      }
+
+      a {
+        color: #404040;
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: #101010;
+      }
+
+      .heading {
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        min-height: 60px;
+        line-height: 60px;
+        padding: 0 10px;
+        background-color: #854b00;
+        color: #fff;
+      }
+
+      .listings {
+        height: 100%;
+        overflow: auto;
+        padding-bottom: 60px;
+      }
+
+      .listings .item {
+        display: block;
+        border-bottom: 1px solid #eee;
+        padding: 10px;
+        text-decoration: none;
+      }
+
+      .listings .item:last-child { border-bottom: none; }
+
+      .listings .item .title {
+        display: block;
+        color: #00853e;
+        font-weight: 700;
+      }
+
+      .listings .item .title small {
+        font-weight: 400;
+      }
+
+      .listings .item.active .title .listings .item .title:hover {
+        color: #8cc63f;
+      }
+
+      .listings .item.active {
+        background-color: #f8f8f8;
+      }
+
+      ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+        border-left: 0;
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      ::-webkit-scrollbar-track {
+        background: none;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #00853e;
+        border-radius: 0;
+      }
+
+      .marker {
+        border: none;
+        cursor: pointer;
+        height: 56px;
+        width: 56px;
+        background-image: url(static/marker.png);
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      .clearfix {
+        display: block;
+      }
+
+      .clearfix::after {
+        content: '.';
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+      }
+
+      /* Marker tweaks */
+      .mapboxgl-popup {
+        padding-bottom: 50px;
+      }
+
+      .mapboxgl-popup-close-button {
+        display: none;
+      }
+
+      .mapboxgl-popup-content {
+        font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+        padding: 0;
+        width: 180px;
+      }
+
+      .mapboxgl-popup-content-wrapper {
+        padding: 1%;
+      }
+
+      .mapboxgl-popup-content h3 {
+        background: #91c949;
+        color: #fff;
+        margin: 0;
+        display: block;
+        padding: 10px;
+        border-radius: 3px 3px 0 0;
+        font-weight: 700;
+        margin-top: -15px;
+      }
+
+      .mapboxgl-popup-content h4 {
+        margin: 0;
+        display: block;
+        padding: 10px;
+        font-weight: 400;
+      }
+
+      .mapboxgl-popup-content div {
+        padding: 10px;
+      }
+
+      .mapboxgl-container .leaflet-marker-icon {
+        cursor: pointer;
+      }
+
+      .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+        margin-top: 15px;
+      }
+
+      .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+        border-bottom-color: #91c949;
+      }
+
+      /*add styles for mapboxgl-ctrl-geocoder here*/
+
+    </style>
+  </head>
+
+  <body>
+
+
+    <nav id="nav" class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="background-color:rgb(247, 205, 150);">
+      <a class="navbar-brand" style="color: rgb(173, 24, 24);" href="{% url 'home' %}"><img src="../static/logo.png " alt="La banane!" width="150" height="100"/><em><strong>La banane en Côte d'Ivoire</strong></em> </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="{% url 'home' %}">Accueil <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'carte' %}">Cartographie</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'service' %}">
+                        Services
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'stat' %}">Passer une commande</a>
+                    </li>
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+                </div>
+              </nav>
+
+
+    <div class='sidebar'>
+      <div class='heading'>
+        <h1>Nos Localisations</h1>
+      </div>
+    <div id='listings' class='listings'></div>
+      <p class='text'>
+        En bref,
+        la Côte d'Ivoire est un pays d'Afrique de l'Ouest doté de stations balnéaires, 
+        de forêts tropicales et d'un patrimoine colonial français. Abidjan, sur la côte Atlantique, 
+        est le principal centre urbain du pays. Ses sites modernes regroupent la Pyramide, un édifice 
+        en béton faisant penser à une ziggourat. La cathédrale Saint-Paul est une structure inclinée 
+        rattachée à une immense croix. Au nord du quartier central des affaires, 
+        le parc national du Banco est une réserve de forêt tropicale au sein de laquelle serpentent des chemins de randonnée.
+      </p>
+    </div>
+
+
+    <div id='map' class='map'> </div>
+    
+
+
+    <style>
+        #menu {
+        position: absolute;
+        background: #fff;
+        padding: 10px;
+        margin-top: 130px;
+        margin-left: 700px;
+        font-family: 'Open Sans', sans-serif;
+        }
+        </style>
+
+<iframe style="width:110% ; height: 530px;" src="https://www.google.com/maps/d/u/0/embed?mid=18EbTg9D3kQXF4bFxy2gYJnTEd1wbi49P"></iframe>
+
+    <div id='menu'>
+        <input id='streets-v11' type='radio' name='rtoggle' value='streets' checked='checked'>
+        <label for='streets'>Rues</label>
+        <input id='light-v10' type='radio' name='rtoggle' value='light'>
+        <label for='light'>Lumineux</label>
+        <input id='dark-v10' type='radio' name='rtoggle' value='dark'>
+        <label for='dark'>Sombre</label>
+        <input id='outdoors-v11' type='radio' name='rtoggle' value='outdoors'>
+        <label for='outdoors'>Grand air</label>
+        <input id='satellite-v9' type='radio' name='rtoggle' value='satellite'>
+        <label for='satellite'>Satellite</label>
+    </div>
+
+  <script>
+  // This will let you use the .remove() function later on
+  if (!('remove' in Element.prototype)) {
+    Element.prototype.remove = function() {
+      if (this.parentNode) {
+        this.parentNode.removeChild(this);
+      }
+    };
+  }
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZ29kaXNvbmUiLCJhIjoiY2syZXN0bXExMGJ5OTNkcGJnbDU2ZXZ1YiJ9.5Y27Gk4On1x1oOlAzqeQNA';
+
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/light-v10',
+    center: [-5, 7],
+    zoom: 5.7,
+    scrollZoom: false
+  });
+
+//Le menu d'affichage en plusieurs types
+
+var layerList = document.getElementById('menu');
+var inputs = layerList.getElementsByTagName('input');
+ 
+function switchLayer(layer) {
+var layerId = layer.target.id;
+map.setStyle('mapbox://styles/mapbox/' + layerId);
+}
+ 
+for (var i = 0; i < inputs.length; i++) {
+inputs[i].onclick = switchLayer;
+}
+
+
+
+      //Adding Markers on the map
+
+        var marker = new mapboxgl.Marker({
+        draggable: true
+        })
+        .setLngLat([-6, 7.2])
+        .addTo(map);
+        
+        function onDragEnd() {
+        var lngLat = marker.getLngLat();
+        coordinates.style.display = 'block';
+        coordinates.innerHTML = 'Longitude: ' + lngLat.lng + '<br />Latitude: ' + lngLat.lat;
+        }
+
+        var marker1 = new mapboxgl.Marker({
+        draggable: true
+        })
+        .setLngLat([-3.5, 6.7])
+        .addTo(map);
+        
+        function onDragEnd() {
+        var lngLat = marker1.getLngLat();
+        coordinates.style.display = 'block';
+        coordinates.innerHTML = 'Longitude: ' + lngLat.lng + '<br />Latitude: ' + lngLat.lat;
+        }
+
+        var marker2 = new mapboxgl.Marker({
+        draggable: true
+        })
+        .setLngLat([-4.22, 5.99])
+        .addTo(map);
+        
+        function onDragEnd() {
+        var lngLat = marker2.getLngLat();
+        coordinates.style.display = 'block';
+        coordinates.innerHTML = 'Longitude: ' + lngLat.lng + '<br />Latitude: ' + lngLat.lat;
+        }
+
+
+        var marker3 = new mapboxgl.Marker({
+        draggable: true
+        })
+        .setLngLat([-7.6, 7.5])
+        .addTo(map);
+        
+        function onDragEnd() {
+        var lngLat = marker3.getLngLat();
+        coordinates.style.display = 'block';
+        coordinates.innerHTML = 'Longitude: ' + lngLat.lng + '<br />Latitude: ' + lngLat.lat;
+        }
+
+       
+
+        marker.on('dragend', onDragEnd);
+       
+
+        // Add zoom and rotation controls to the map.
+        map.addControl(new mapboxgl.NavigationControl());
+
+        map.addControl(new mapboxgl.FullscreenControl());
+        
+        var size = 200;
+        
+        var pulsingDot = {
+        width: size,
+        height: size,
+        data: new Uint8Array(size * size * 4),
+        
+        onAdd: function() {
+        var canvas = document.createElement('canvas');
+        canvas.width = this.width;
+        canvas.height = this.height;
+        this.context = canvas.getContext('2d');
+        },
+        
+        render: function() {
+        var duration = 1000;
+        var t = (performance.now() % duration) / duration;
+        
+        var radius = size / 2 * 0.3;
+        var outerRadius = size / 2 * 0.7 * t + radius;
+        var context = this.context;
+        
+        // draw outer circle
+        context.clearRect(0, 0, this.width, this.height);
+        context.beginPath();
+        context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+        context.fillStyle = 'rgba(255, 200, 200,' + (1 - t) + ')';
+        context.fill();
+        
+        // draw inner circle
+        context.beginPath();
+        context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+        context.fillStyle = 'rgba(255, 100, 100, 1)';
+        context.strokeStyle = 'white';
+        context.lineWidth = 2 + 4 * (1 - t);
+        context.fill();
+        context.stroke();
+        
+        // update this image's data with data from the canvas
+        this.data = context.getImageData(0, 0, this.width, this.height).data;
+        
+        // keep the map repainting
+        map.triggerRepaint();
+        
+        // return `true` to let the map know that the image was updated
+        return true;
+        }
+        };
+        
+        map.on('load', function () {
+        
+        map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+        
+        map.addLayer({
+        "id": "points",
+        "type": "symbol",
+        "source": {
+        "type": "geojson",
+        "data": {
+        "type": "FeatureCollection",
+        "features": [{
+        "type": "Feature",
+        "geometry": {
+        "type": "Point",
+        "coordinates": [-4, 5.4]
+        }
+        }]
+        }
+        },
+        "layout": {
+        "icon-image": "pulsing-dot"
+        }
+        });
+        });
+
+       
+ 
+
+        var coordinates = document.getElementById('coordinates');
+
+  var stores = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+          -4.22, 5.99
+          ]
+        },
+        properties: {
+          phoneFormatted: '(225) 234-7336',
+          phone: '2022347336',
+          address: '33 BP AGBOVILLE 01',
+          city: 'Agboville',
+          country: 'Ivory Coast',
+          crossStreet: 'SITARAIL',
+          postalCode: '20005',
+          state: 'RCI.'
+        }
+      },
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+          -5.74, 6.98
+          ]
+        },
+        properties: {
+          phoneFormatted: '(225) 507-8357',
+          phone: '2025078357',
+          address: '105 BP BOUAFLE 23',
+          city: 'Bouaflé',
+          country: 'Ivory Coast',
+          crossStreet: 'Rue des arts,',
+          postalCode: '20037',
+          state: 'RCI'
+        }
+      },
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+          -3.48, 6.71
+          ]
+        },
+        properties: {
+          phoneFormatted: '(225) 387-9338',
+          phone: '2023879338',
+          address: '55 BP 03 ABENGOUROU',
+          city: 'Abengourou',
+          country: 'Ivory Coast',
+          crossStreet: 'Grand marché',
+          postalCode: '20036',
+          state: 'CI'
+        }
+      },
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+          -7.55, 7.4
+          ]
+        },
+        properties: {
+          phoneFormatted: '(225) 337-9338',
+          phone: '2023379338',
+          address: '215 BP 87 MAN',
+          city: 'Man',
+          country: 'Ivory Coast',
+          crossStreet: 'at 34th St NW',
+          postalCode: '20007',
+          state: 'CI'
+        }
+      },
+
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [
+          -4, 5.4
+          ]
+        },
+        properties: {
+          
+         
+          address: 'Nôtre Pays',
+          city: 'En bref, la Côte d\'Ivoire est un pays d\'Afrique de l\'Ouest doté de stations balnéaires de forêts tropicales et d un patrimoine colonial français. Abidjan, sur la côte Atlantique, est le principal centre urbain du pays. Ses sites modernes regroupent la Pyramide, un édifice en béton faisant penser à une ziggourat. La cathédrale Saint-Paul est une structure inclinée rattachée à une immense croix. Au nord du quartier central des affaires, le parc national du Banco est une réserve de forêt tropicale au sein de laquelle serpentent des chemins de randonnée.',
+          
+          state: 'CI'
+        }
+      },
+  ]
+  };
+  // This adds the stores to the map
+  map.on('load', function(e) {
+    map.addSource('places', {
+      type: 'geojson',
+      data: stores
+    });
+    buildLocationList(stores); // Initialize the list
+
+    // Add `new mapboxgl.Geocoder` code here
+
+    // Add the `map.addSource` and `map.addLayer` here
+
+    // Add the `geocode` event listener here
+
+    // Add `forEach` function here
+
+    // Add `sort` function here
+
+    // Add function that fits bounds to search and closest store here
+  });
+
+
+  stores.features.forEach(function(marker, i) {
+    var el = document.createElement('div'); // Create an img element for the marker
+    el.id = 'marker' + i;
+    el.className = 'marker';
+    // Add markers to the map at all points
+    new mapboxgl.Marker(el, { offset: [0, -23] })
+      .setLngLat(marker.geometry.coordinates)
+      .addTo(map);
+
+    el.addEventListener('click', function(e) {
+      flyToStore(marker); // Fly to the point
+      createPopUp(marker); // Close all other popups and display popup for clicked store
+      var activeItem = document.getElementsByClassName('active'); // Highlight listing in sidebar (and remove highlight for all other listings)
+
+      e.stopPropagation();
+      if (activeItem[0]) {
+        activeItem[0].classList.remove('active');
+      }
+
+      var listing = document.getElementById('listing-' + i);
+      listing.classList.add('active');
+    });
+  });
+
+  function flyToStore(currentFeature) {
+    map.flyTo({
+      center: currentFeature.geometry.coordinates,
+      zoom: 15
+    });
+  }
+
+  function createPopUp(currentFeature) {
+    var popUps = document.getElementsByClassName('mapboxgl-popup');
+    if (popUps[0]) popUps[0].remove();
+
+    var popup = new mapboxgl.Popup({ closeOnClick: false })
+      .setLngLat(currentFeature.geometry.coordinates)
+      .setHTML('<h3>Localité de production</h3>' +
+        '<h4>' + currentFeature.properties.address + '</h4>')
+      .addTo(map);
+  }
+
+
+  function buildLocationList(data) {
+    for (i = 0; i < data.features.length; i++) {
+      var currentFeature = data.features[i];
+      var prop = currentFeature.properties;
+
+      var listings = document.getElementById('listings');
+      var listing = listings.appendChild(document.createElement('div'));
+      listing.className = 'item';
+      listing.id = 'listing-' + i;
+
+      var link = listing.appendChild(document.createElement('a'));
+      link.href = '#';
+      link.className = 'title';
+      link.dataPosition = i;
+      link.innerHTML = prop.address;
+
+      var details = listing.appendChild(document.createElement('div'));
+      details.innerHTML = prop.city;
+      if (prop.phone) {
+        details.innerHTML += ' &middot; ' + prop.phoneFormatted;
+      }
+
+      // Add rounded distance here
+
+      link.addEventListener('click', function(e) {
+        var clickedListing = data.features[this.dataPosition]; // Update the currentFeature to the store associated with the clicked link
+        flyToStore(clickedListing); // Fly to the point
+        createPopUp(clickedListing); // Close all other popups and display popup for clicked store
+        var activeItem = document.getElementsByClassName('active'); // Highlight listing in sidebar (and remove highlight for all other listings)
+        if (activeItem[0]) {
+          activeItem[0].classList.remove('active');
+        }
+        this.parentNode.classList.add('active');
+      });
+    }
+  }
+    </script>
+  </body>
+</html>
+
+<iframe seamless width="888" height="336" frameborder="0" src="https://www.infoclimat.fr/public-api/mixed/iframeSLIDE?_ll=-5,7&_inc=WyJBaXplbmF5IiwiNjIiLCIzMDM4MzQxIiwiRlIiXQ==&_auth=VE5RRgd5AyFXeltsA3VWfwVtVGFbLQEmB3sBYl02UC0EYFExVjVXNV41WidTfAApBTcCfA43U2sBalE1C2IDf1QoUTYHZANiVzBbOgM3VmMFKVQrW3kBOAd7AXldMVA1BGdRK1Y0VzBeNVomU2IAMAU%2BAnwOMFNrAWBRKQt5A2FUMlEyB2MDZVc7WzADNFZiBTBUK1t7ATwHMQFmXTVQZwRmUWFWZFdkXmRablMyAD0FMAJ8DjRTbgFhUTQLbgNoVDdRPQd7A35XQVtKAy5WIgV0VGFbIgEkBzEBOF1k&_c=d3f1c2246ad60e11fb3cfb78fdbb4c98"></iframe>
+
+
+
+<div class= "embed360">
+  <img src= "static/one360.jpg">
+  
+</div>
+
+<script>
+  embed360('.embed360');
+</script>
+
+<style>
+  .embed360 {height: 400px ; width: 650px;}
+</style>
